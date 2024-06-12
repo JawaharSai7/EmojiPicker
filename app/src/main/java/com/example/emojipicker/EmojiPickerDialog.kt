@@ -8,7 +8,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+//just checking with git commits
 class EmojiPickerDialog(context: Context, private val emojis: List<Emoji>, private val listener: (Emoji) -> Unit) :
     Dialog(context) {
 
