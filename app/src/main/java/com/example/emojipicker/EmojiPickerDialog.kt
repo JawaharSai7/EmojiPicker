@@ -22,7 +22,6 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_emoji_picker)
-
         recyclerView = findViewById(R.id.rv_emojis)
         val searchEditText: EditText = findViewById(R.id.et_search)
         tabLayout = findViewById(R.id.tabs_categories)

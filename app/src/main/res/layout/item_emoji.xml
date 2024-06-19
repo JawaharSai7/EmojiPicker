@@ -3,17 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-    <!-- Category heading -->
-    <TextView
-        android:id="@+id/tv_category_heading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:textColor="@android:color/black"/>
-
     <!-- Emoji item -->
     <TextView
         android:id="@+id/tv_emoji"
@@ -22,5 +11,4 @@
         android:textSize="20sp"
         android:padding="8dp"
         android:textColor="?android:textColorPrimary"/>
-
 </LinearLayout>
