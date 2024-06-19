@@ -11,11 +11,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val emojis = loadEmojis(this)
+        val emojiCategories = loadEmojis(this) // List<EmojiCategory>
 
         val button: Button = findViewById(R.id.btn_open_emoji_picker)
         button.setOnClickListener {
-            EmojiPickerDialog(this, emojis.flatMap { it.items }) { emoji ->
+            EmojiPickerDialog(this, emojiCategories) { emoji ->
                 // Handle emoji selection
                 Toast.makeText(this, "Selected: ${emoji.emojiSymbol}", Toast.LENGTH_SHORT).show()
             }.show()
