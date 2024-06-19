@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EmojiPicker</string>
+    <color name="tabBackground">#F2F2F2</color>
+    <color name="light_grey">#CCCCCC</color>
 </resources>

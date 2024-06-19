@@ -5,7 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -17,7 +19,7 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
     private lateinit var allEmojis: List<Emoji>
     private lateinit var recyclerView: RecyclerView
     private lateinit var tabLayout: TabLayout
-    private val emojiPositionMap = mutableMapOf<Int, String>() // Mapping positions to categories
+    private val emojiPositionMap = mutableMapOf<Int, Int>() // Mapping positions to tab index
     private var isUserScrolling = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +64,17 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
 
     private fun setupTabs(tabLayout: TabLayout) {
         tabLayout.addTab(tabLayout.newTab().setText("All"))
+
         emojiCategories.forEachIndexed { index, category ->
-            tabLayout.addTab(tabLayout.newTab().setText(category.title))
+            val tab = tabLayout.newTab()
+            val customView = LayoutInflater.from(tabLayout.context).inflate(R.layout.custom_tab_layout, null)
+            customView.findViewById<TextView>(R.id.tv_tab_title)?.text = category.title
+            tab.customView = customView
+            tabLayout.addTab(tab)
+
             val position = allEmojis.indexOfFirst { it == category.items.first() }
             if (position != -1) {
-                emojiPositionMap[position] = category.title
+                emojiPositionMap[position] = index + 1 // Storing the tab index
             }
         }
 
@@ -91,14 +99,11 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
     }
 
     private fun updateTabSelection(position: Int) {
-        val category = emojiPositionMap.entries.lastOrNull { it.key <= position }?.value ?: "All"
-        for (i in 0 until tabLayout.tabCount) {
-            if (tabLayout.getTabAt(i)?.text == category) {
-                tabLayout.removeOnTabSelectedListener(tabLayoutListeners)
-                tabLayout.selectTab(tabLayout.getTabAt(i))
-                tabLayout.addOnTabSelectedListener(tabLayoutListeners)
-                break
-            }
+        val categoryIndex = emojiPositionMap.entries.lastOrNull { it.key <= position }?.value ?: 0
+        if (tabLayout.selectedTabPosition != categoryIndex) {
+            tabLayout.removeOnTabSelectedListener(tabLayoutListeners)
+            tabLayout.selectTab(tabLayout.getTabAt(categoryIndex))
+            tabLayout.addOnTabSelectedListener(tabLayoutListeners)
         }
     }
 
