@@ -1,5 +1,4 @@
 package com.example.emojipicker
-
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -14,14 +13,12 @@ import com.google.android.material.tabs.TabLayout
 
 class EmojiPickerDialog(context: Context, private val emojiCategories: List<EmojiCategory>, private val listener: (Emoji) -> Unit) :
     Dialog(context) {
-
     private lateinit var adapter: EmojiAdapter
     private lateinit var allEmojis: List<Emoji>
     private lateinit var recyclerView: RecyclerView
     private lateinit var tabLayout: TabLayout
     private val emojiPositionMap = mutableMapOf<Int, Int>() // Mapping positions to tab index
     private var isUserScrolling = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_emoji_picker)
@@ -67,7 +64,8 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
 
         emojiCategories.forEachIndexed { index, category ->
             val tab = tabLayout.newTab()
-            val customView = LayoutInflater.from(tabLayout.context).inflate(R.layout.custom_tab_layout, null)
+            val customView =
+                LayoutInflater.from(tabLayout.context).inflate(R.layout.custom_tab_layout, null)
             customView.findViewById<TextView>(R.id.tv_tab_title)?.text = category.title
             tab.customView = customView
             tabLayout.addTab(tab)
@@ -120,7 +118,10 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
         }
         if (targetPosition != -1) {
             recyclerView.post {
-                (recyclerView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(targetPosition, 0)
+                (recyclerView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
+                    targetPosition,
+                    0
+                )
             }
         }
     }

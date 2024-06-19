@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class EmojiAdapter(private var emojis: List<Emoji>, private val listener: (Emoji) -> Unit) :
     RecyclerView.Adapter<EmojiAdapter.EmojiViewHolder>() {
-
     inner class EmojiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val emojiText: TextView = itemView.findViewById(R.id.tv_emoji)
 
@@ -33,4 +32,5 @@ class EmojiAdapter(private var emojis: List<Emoji>, private val listener: (Emoji
         emojis = newList
         notifyDataSetChanged()
     }
+
 }
