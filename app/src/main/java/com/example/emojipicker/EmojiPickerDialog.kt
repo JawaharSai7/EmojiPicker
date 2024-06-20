@@ -1,4 +1,5 @@
 package com.example.emojipicker
+import EmojiCategory
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle

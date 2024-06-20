@@ -1,5 +1,6 @@
 package com.example.emojipicker
 
+import EmojiCategory
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

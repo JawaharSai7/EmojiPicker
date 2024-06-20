@@ -5,8 +5,3 @@ data class Emoji(
     val keyword: String
 )
 
-data class EmojiCategory(
-    val title: String,
-    val items: List<Emoji>
-)
-

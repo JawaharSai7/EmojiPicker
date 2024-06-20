@@ -31,4 +31,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'  // Update as necessary
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'  // Update as necessary
     implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 }
