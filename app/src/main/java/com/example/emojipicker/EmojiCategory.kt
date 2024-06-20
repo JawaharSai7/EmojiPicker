@@ -1,4 +1,4 @@
-import com.example.emojipicker.Emoji
+package com.example.emojipicker
 
 data class EmojiCategory(
     val title: String,

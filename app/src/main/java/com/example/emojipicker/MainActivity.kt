@@ -1,9 +1,10 @@
-package com.example.emojipicker
-
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.emojipicker.EmojiPickerDialog
+import com.example.emojipicker.R
+import com.example.emojipicker.loadEmojis
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

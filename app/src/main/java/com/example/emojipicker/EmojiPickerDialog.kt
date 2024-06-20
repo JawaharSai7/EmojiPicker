@@ -1,5 +1,5 @@
 package com.example.emojipicker
-import EmojiCategory
+
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -12,24 +12,32 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 
-class EmojiPickerDialog(context: Context, private val emojiCategories: List<EmojiCategory>, private val listener: (Emoji) -> Unit) :
-    Dialog(context) {
+class EmojiPickerDialog(
+    context: Context,
+    private val emojiCategories: List<EmojiCategory>,
+    private val listener: (Emoji) -> Unit
+) : Dialog(context) {
     private lateinit var adapter: EmojiAdapter
     private lateinit var allEmojis: List<Emoji>
+    private lateinit var recentEmojis: MutableList<Emoji> // Define recentEmojis as a mutable list
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var tabLayout: TabLayout
     private val emojiPositionMap = mutableMapOf<Int, Int>() // Mapping positions to tab index
     private var isUserScrolling = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_emoji_picker)
+
         recyclerView = findViewById(R.id.rv_emojis)
         val searchEditText: EditText = findViewById(R.id.et_search)
         tabLayout = findViewById(R.id.tabs_categories)
 
         allEmojis = emojiCategories.flatMap { it.items }
+        recentEmojis = mutableListOf() // Initialize recentEmojis
 
-        adapter = EmojiAdapter(allEmojis, listener)
+        adapter = EmojiAdapter(allEmojis, listener, recentEmojis) // Pass recentEmojis to adapter
         recyclerView.layoutManager = GridLayoutManager(context, 5)
         recyclerView.adapter = adapter
 
@@ -60,8 +68,11 @@ class EmojiPickerDialog(context: Context, private val emojiCategories: List<Emoj
     }
 
     private fun setupTabs(tabLayout: TabLayout) {
-        tabLayout.addTab(tabLayout.newTab().setText("All"))
+        // Add Recents tab
+        val recentsTab = tabLayout.newTab().setText("Recents")
+        tabLayout.addTab(recentsTab, 0)
 
+        // Add other categories
         emojiCategories.forEachIndexed { index, category ->
             val tab = tabLayout.newTab()
             val customView =
