@@ -13,21 +13,23 @@
         android:padding="8dp"
         android:background="@drawable/search_edittext_background"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_search" />
+        android:drawableStart="@drawable/ic_search"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:tabMode="scrollable" />
+        app:tabMode="scrollable"
+        app:tabIndicatorHeight="0dp"
+        app:tabIndicatorColor="@android:color/transparent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_emojis"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:clipToPadding="false"
         android:padding="8dp" />
 </LinearLayout>

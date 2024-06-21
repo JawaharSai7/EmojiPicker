@@ -1,6 +1,5 @@
 package com.example.emojipicker
 
-import com.example.emojipicker.Emoji
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,50 +7,58 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class EmojiAdapter(
-    private var emojis: List<Emoji>,
-    private val listener: (Emoji) -> Unit,
-    private val recentEmojis: MutableList<Emoji> // Add recentEmojis list here
-) : RecyclerView.Adapter<EmojiAdapter.EmojiViewHolder>() {
+    private var items: List<Any>, // List containing both String headers and Emoji items
+    private val listener: (Emoji) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val ITEM_TYPE_HEADER = 0
+    private val ITEM_TYPE_EMOJI = 1
 
     inner class EmojiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val emojiText: TextView = itemView.findViewById(R.id.tv_emoji)
+        private val emojiText: TextView = itemView.findViewById(R.id.tv_emoji)
 
         fun bind(emoji: Emoji) {
             emojiText.text = emoji.emojiSymbol
             itemView.setOnClickListener {
                 listener(emoji)
-                addToRecents(emoji)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmojiViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_emoji, parent, false)
-        return EmojiViewHolder(view)
+    inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val headerText: TextView = itemView.findViewById(R.id.tv_category_heading)
+
+        fun bind(header: String) {
+            headerText.text = header
+        }
     }
 
-    override fun onBindViewHolder(holder: EmojiViewHolder, position: Int) {
-        holder.bind(emojis[position])
+    override fun getItemViewType(position: Int): Int {
+        return if (items[position] is String) ITEM_TYPE_HEADER else ITEM_TYPE_EMOJI
     }
 
-    override fun getItemCount(): Int = emojis.size
-
-    private fun addToRecents(emoji: Emoji) {
-        // Add emoji to recentEmojis if it's not already present
-        if (!recentEmojis.contains(emoji)) {
-            if (recentEmojis.size >= 20) {
-                recentEmojis.removeAt(0) // Remove the oldest emoji if list exceeds capacity
-            }
-            recentEmojis.add(emoji)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == ITEM_TYPE_HEADER) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_emoji_category, parent, false)
+            HeaderViewHolder(view)
         } else {
-            // If emoji is already in recentEmojis, move it to the end (most recent position)
-            recentEmojis.remove(emoji)
-            recentEmojis.add(emoji)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_emoji, parent, false)
+            EmojiViewHolder(view)
         }
     }
 
-    fun updateList(newList: List<Emoji>) {
-        emojis = newList
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is HeaderViewHolder) {
+            holder.bind(items[position] as String)
+        } else if (holder is EmojiViewHolder) {
+            holder.bind(items[position] as Emoji)
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    fun updateList(newList: List<Any>) {
+        items = newList
         notifyDataSetChanged()
     }
 }

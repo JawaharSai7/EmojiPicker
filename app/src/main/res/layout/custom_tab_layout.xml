@@ -4,14 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center">
+
     <TextView
         android:id="@+id/tv_tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/tab_text_color"
+        android:textColor="@color/tab_text_color_selector"
         android:textSize="16sp"
         android:textStyle="bold"
         android:padding="8dp"
-        android:background="@drawable/tab_background"
+        android:background="@drawable/rounded_tab_background_selector"
         android:gravity="center" />
 </LinearLayout>

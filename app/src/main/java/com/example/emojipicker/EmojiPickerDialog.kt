@@ -18,9 +18,7 @@ class EmojiPickerDialog(
     private val listener: (Emoji) -> Unit
 ) : Dialog(context) {
     private lateinit var adapter: EmojiAdapter
-    private lateinit var allEmojis: List<Emoji>
-    private lateinit var recentEmojis: MutableList<Emoji> // Define recentEmojis as a mutable list
-
+    private lateinit var allItems: List<Any> // List with headers and emojis
     private lateinit var recyclerView: RecyclerView
     private lateinit var tabLayout: TabLayout
     private val emojiPositionMap = mutableMapOf<Int, Int>() // Mapping positions to tab index
@@ -34,11 +32,15 @@ class EmojiPickerDialog(
         val searchEditText: EditText = findViewById(R.id.et_search)
         tabLayout = findViewById(R.id.tabs_categories)
 
-        allEmojis = emojiCategories.flatMap { it.items }
-        recentEmojis = mutableListOf() // Initialize recentEmojis
+        allItems = prepareItemList(emojiCategories)
 
-        adapter = EmojiAdapter(allEmojis, listener, recentEmojis) // Pass recentEmojis to adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 5)
+        adapter = EmojiAdapter(allItems, listener)
+
+        val spanCount = 5 // Number of columns for emojis
+        val layoutManager = GridLayoutManager(context, spanCount)
+        layoutManager.spanSizeLookup = CustomSpanSizeLookup(allItems, spanCount)
+
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
         searchEditText.addTextChangedListener(object : TextWatcher {
@@ -52,6 +54,15 @@ class EmojiPickerDialog(
 
         setupTabs(tabLayout)
         setupScrollListener()
+    }
+
+    private fun prepareItemList(emojiCategories: List<EmojiCategory>): List<Any> {
+        val list = mutableListOf<Any>()
+        emojiCategories.forEach { category ->
+            list.add(category.title) // Add header
+            list.addAll(category.items) // Add emojis under this category
+        }
+        return list
     }
 
     private val tabLayoutListeners = object : TabLayout.OnTabSelectedListener {
@@ -68,22 +79,16 @@ class EmojiPickerDialog(
     }
 
     private fun setupTabs(tabLayout: TabLayout) {
-        // Add Recents tab
-        val recentsTab = tabLayout.newTab().setText("Recents")
-        tabLayout.addTab(recentsTab, 0)
-
-        // Add other categories
         emojiCategories.forEachIndexed { index, category ->
             val tab = tabLayout.newTab()
-            val customView =
-                LayoutInflater.from(tabLayout.context).inflate(R.layout.custom_tab_layout, null)
+            val customView = LayoutInflater.from(tabLayout.context).inflate(R.layout.custom_tab_layout, null)
             customView.findViewById<TextView>(R.id.tv_tab_title)?.text = category.title
             tab.customView = customView
             tabLayout.addTab(tab)
 
-            val position = allEmojis.indexOfFirst { it == category.items.first() }
+            val position = allItems.indexOfFirst { it == category.title }
             if (position != -1) {
-                emojiPositionMap[position] = index + 1 // Storing the tab index
+                emojiPositionMap[position] = index
             }
         }
 
@@ -117,7 +122,9 @@ class EmojiPickerDialog(
     }
 
     private fun filter(text: String) {
-        val filteredList = allEmojis.filter { it.keyword.contains(text, true) }
+        val filteredList = allItems.filter {
+            it is Emoji && it.keyword.contains(text, true)
+        }
         adapter.updateList(filteredList)
     }
 
@@ -125,7 +132,7 @@ class EmojiPickerDialog(
         val targetPosition = if (position == 0) {
             0
         } else {
-            allEmojis.indexOfFirst { it == emojiCategories[position - 1].items.first() }
+            allItems.indexOfFirst { it == emojiCategories[position].title }
         }
         if (targetPosition != -1) {
             recyclerView.post {

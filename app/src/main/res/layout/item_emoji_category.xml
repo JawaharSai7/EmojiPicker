@@ -1,13 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginBottom="2dp"> <!-- Adds space below the header -->
+
     <TextView
         android:id="@+id/tv_category_heading"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="left"
+        android:padding="8dp"
+        android:gravity="left"
+        android:singleLine="true"
+        android:ellipsize="end"/>
 </LinearLayout>
