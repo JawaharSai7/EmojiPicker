@@ -59,6 +59,6 @@ class EmojiAdapter(
 
     fun updateList(newList: List<Any>) {
         items = newList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, newList.size)
     }
 }
