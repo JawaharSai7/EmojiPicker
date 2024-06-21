@@ -24,7 +24,7 @@ class EmojiPickerDialog(
     private lateinit var recyclerView: RecyclerView
     private lateinit var recentRecyclerView: RecyclerView
     private lateinit var tabLayout: TabLayout
-    private val emojiPositionMap = mutableMapOf<Int, Int>()
+    private val categoryPositions = mutableMapOf<String, Int>()
     private var isUserScrolling = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,6 @@ class EmojiPickerDialog(
         val searchEditText: EditText = findViewById(R.id.et_search)
         tabLayout = findViewById(R.id.tabs_categories)
 
-        // Prepare items for main RecyclerView
         allItems = prepareItemList(emojiCategories.filter { it.title != "Recents" })
         adapter = EmojiAdapter(allItems) { emoji ->
             listener(emoji)
@@ -83,7 +82,8 @@ class EmojiPickerDialog(
     private fun prepareItemList(emojiCategories: List<EmojiCategory>): List<Any> {
         val list = mutableListOf<Any>()
         emojiCategories.forEach { category ->
-            list.add(category.title)
+            list.add(category.title) // Add header
+            categoryPositions[category.title] = list.size - 1
             list.addAll(category.items)
         }
         return list
@@ -109,12 +109,6 @@ class EmojiPickerDialog(
             customView.findViewById<TextView>(R.id.tv_tab_title)?.text = category.title
             tab.customView = customView
             tabLayout.addTab(tab)
-
-
-            val position = allItems.indexOfFirst { it == category.title }
-            if (position != -1) {
-                emojiPositionMap[position] = index
-            }
         }
 
         tabLayout.addOnTabSelectedListener(tabLayoutListeners)
@@ -138,10 +132,11 @@ class EmojiPickerDialog(
     }
 
     private fun updateTabSelection(position: Int) {
-        val categoryIndex = emojiPositionMap.entries.lastOrNull { it.key <= position }?.value ?: 0
-        if (tabLayout.selectedTabPosition != categoryIndex) {
+        val categoryIndex = categoryPositions.entries.lastOrNull { it.value <= position }?.key
+        val tabIndex = emojiCategories.indexOfFirst { it.title == categoryIndex }
+        if (tabIndex != -1 && tabLayout.selectedTabPosition != tabIndex) {
             tabLayout.removeOnTabSelectedListener(tabLayoutListeners)
-            tabLayout.selectTab(tabLayout.getTabAt(categoryIndex))
+            tabLayout.selectTab(tabLayout.getTabAt(tabIndex))
             tabLayout.addOnTabSelectedListener(tabLayoutListeners)
         }
     }
@@ -154,18 +149,10 @@ class EmojiPickerDialog(
     }
 
     private fun smoothScrollToCategory(position: Int) {
-        val targetPosition = if (position == 0) {
-            0
-        } else {
-            allItems.indexOfFirst { it == emojiCategories[position].title }
-        }
-        if (targetPosition != -1) {
-            recyclerView.post {
-                (recyclerView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(
-                    targetPosition,
-                    0
-                )
-            }
+        val category = emojiCategories.filter { it.title != "Recents" }[position]
+        val targetPosition = categoryPositions[category.title] ?: 0
+        recyclerView.post {
+            (recyclerView.layoutManager as GridLayoutManager).scrollToPositionWithOffset(targetPosition, 0)
         }
     }
 

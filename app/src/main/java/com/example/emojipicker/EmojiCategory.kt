@@ -9,10 +9,10 @@ object EmojiManager {
     private val recentEmojis = mutableListOf<Emoji>()
 
     fun addRecent(emoji: Emoji) {
-        // Remove emoji if it already exists to avoid duplication
+        // Prevent duplicates and maintain order
         recentEmojis.remove(emoji)
         recentEmojis.add(0, emoji)
-        if (recentEmojis.size > 10) { // Limit to 20 recent emojis
+        if (recentEmojis.size > 10) { // Keep only 20 recent emojis
             recentEmojis.removeAt(recentEmojis.size - 1)
         }
     }

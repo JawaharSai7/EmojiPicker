@@ -58,7 +58,10 @@ class EmojiAdapter(
     override fun getItemCount(): Int = items.size
 
     fun updateList(newList: List<Any>) {
+        val diffResult = androidx.recyclerview.widget.DiffUtil.calculateDiff(
+            EmojiDiffCallback(items, newList)
+        )
         items = newList
-        notifyItemRangeChanged(0, newList.size)
+        diffResult.dispatchUpdatesTo(this)
     }
 }

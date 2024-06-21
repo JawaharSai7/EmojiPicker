@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:hint="Search"
         android:padding="8dp"
+        android:singleLine="true"
         android:background="@drawable/search_edittext_background"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_search"/>
