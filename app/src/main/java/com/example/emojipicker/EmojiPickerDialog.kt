@@ -63,6 +63,7 @@ class EmojiPickerDialog(
             updateRecents() // Refresh recent emojis
         }
 
+
         recentRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         recentRecyclerView.adapter = recentAdapter
 

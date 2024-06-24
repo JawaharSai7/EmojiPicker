@@ -10,13 +10,12 @@
         android:id="@+id/et_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/search_edittext_background"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="10dp"
         android:hint="Search"
         android:padding="8dp"
-        android:singleLine="true"
-        android:background="@drawable/search_edittext_background"
-        android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_search"/>
-
+        android:singleLine="true" />
 
 
     <com.google.android.material.tabs.TabLayout
@@ -24,20 +23,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:tabMode="scrollable"
+        app:tabIndicatorColor="@android:color/transparent"
         app:tabIndicatorHeight="0dp"
-        app:tabIndicatorColor="@android:color/transparent" />
+        app:tabMode="scrollable" />
 
     <!-- RecyclerView for Recent Emojis -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recents"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="12dp"
-        android:textSize="18sp"/>
+        android:text="Recents"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recent_emojis"
@@ -51,8 +51,8 @@
         android:id="@+id/rv_emojis"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="5dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:padding="8dp" />
 
